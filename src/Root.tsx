@@ -110,7 +110,7 @@ const Scene: React.FC<{index: number}> = ({index}) => {
             height: 850,
           }}
         >
-          <Piston />
+          <Piston phase={(['intake', 'compression', 'injection', 'power', 'rotation'] as const)[index - 1]} />
         </div>
       )}
 
