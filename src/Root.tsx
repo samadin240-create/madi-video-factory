@@ -8,6 +8,7 @@ import {
   useCurrentFrame,
 } from 'remotion';
 import {Piston} from './components/Piston';
+import {MadiFinance} from './finance/MadiFinance';
 
 const scenes = [
   {
@@ -185,13 +186,23 @@ const DieselVideo: React.FC = () => {
 };
 
 export const Root: React.FC = () => (
-  <Composition
-    id="DieselEngine"
-    component={DieselVideo}
-    durationInFrames={1650}
-    fps={30}
-    width={1080}
-    height={1920}
-  />
-);
+  <>
+    <Composition
+      id="DieselEngine"
+      component={DieselVideo}
+      durationInFrames={1650}
+      fps={30}
+      width={1080}
+      height={1920}
+    />
 
+    <Composition
+      id="MadiFinance"
+      component={MadiFinance}
+      durationInFrames={1352}
+      fps={30}
+      width={1080}
+      height={1920}
+    />
+  </>
+);

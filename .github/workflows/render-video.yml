@@ -2,6 +2,15 @@ name: Render MADI Video
 
 on:
   workflow_dispatch:
+    inputs:
+      video_name:
+        description: 'Pilih video yang akan dibuat'
+        required: true
+        type: choice
+        options:
+          - MadiFinance
+          - DieselEngine
+        default: MadiFinance
 
 permissions:
   contents: read
@@ -27,12 +36,16 @@ jobs:
       - name: Setup Remotion browser
         run: npx remotion browser ensure
 
-      - name: Render video
-        run: npx remotion render src/index.ts DieselEngine output/DieselEngine.mp4 --codec=h264 --gl=swangle
+      - name: Render selected video
+        env:
+          VIDEO_NAME: ${{ inputs.video_name }}
+        run: |
+          mkdir -p output
+          npx remotion render src/index.ts "$VIDEO_NAME" "output/$VIDEO_NAME.mp4" --codec=h264 --gl=swangle
 
       - name: Upload MP4
         uses: actions/upload-artifact@v4
         with:
-          name: MADI-DieselEngine
-          path: output/DieselEngine.mp4
+          name: MADI-${{ inputs.video_name }}
+          path: output/${{ inputs.video_name }}.mp4
           if-no-files-found: error
