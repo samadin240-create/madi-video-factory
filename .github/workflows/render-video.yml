@@ -33,6 +33,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Generate American English voice-over
+        if: inputs.video_name == 'MadiFinance'
+        run: |
+          python -m pip install edge-tts
+          mkdir -p public/audio
+          edge-tts --voice en-US-GuyNeural --text "Why do so many people stay broke, even when they work hard? Because earning money and building wealth are two different things." --write-media public/audio/madi-finance-1.mp3
+          edge-tts --voice en-US-GuyNeural --text "A paycheck arrives, bills take it away, and spending fills the gap. Then the same cycle starts again." --write-media public/audio/madi-finance-2.mp3
+          edge-tts --voice en-US-GuyNeural --text "The real difference is not only how much you earn. It is how much you keep, and what you do with it." --write-media public/audio/madi-finance-3.mp3
+          edge-tts --voice en-US-GuyNeural --text "Start small. Save consistently, learn before you invest, and give your money time to grow. Your future is built one decision at a time." --write-media public/audio/madi-finance-4.mp3
+
       - name: Setup Remotion browser
         run: npx remotion browser ensure
 

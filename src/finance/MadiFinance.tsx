@@ -1,7 +1,10 @@
 import React from 'react';
 import {
   AbsoluteFill,
+  Audio,
+  Sequence,
   interpolate,
+  staticFile,
   useCurrentFrame,
 } from 'remotion';
 
@@ -39,6 +42,14 @@ export const MadiFinance: React.FC = () => {
   const index = Math.min(3, Math.floor(frame / sceneDuration));
   const localFrame = frame - index * sceneDuration;
   const scene = scenes[index];
+
+  const voiceLines = [
+    'Why do so many people stay broke, even when they work hard? Because earning money and building wealth are two different things.',
+    'A paycheck arrives, bills take it away, and spending fills the gap. Then the same cycle starts again.',
+    'The real difference is not only how much you earn. It is how much you keep, and what you do with it.',
+    'Start small. Save consistently, learn before you invest, and give your money time to grow. Your future is built one decision at a time.',
+  ];
+
 
   const opacity = interpolate(
     localFrame,
@@ -280,6 +291,25 @@ export const MadiFinance: React.FC = () => {
       <div
         style={{
           position: 'absolute',
+          bottom: 190,
+          left: 90,
+          right: 90,
+          padding: 18,
+          borderRadius: 14,
+          backgroundColor: 'rgba(8, 11, 18, 0.78)',
+          color: '#FFFFFF',
+          fontSize: 24,
+          lineHeight: 1.4,
+          textAlign: 'center',
+          opacity,
+        }}
+      >
+        {voiceLines[index]}
+      </div>
+
+      <div
+        style={{
+          position: 'absolute',
           bottom: 105,
           color: '#64748B',
           fontSize: 19,
@@ -307,6 +337,20 @@ export const MadiFinance: React.FC = () => {
           }}
         />
       </div>
-    </AbsoluteFill>
+
+      <Sequence from={0} durationInFrames={338}>
+        <Audio src={staticFile('audio/madi-finance-1.mp3')} volume={0.95} />
+      </Sequence>
+      <Sequence from={338} durationInFrames={338}>
+        <Audio src={staticFile('audio/madi-finance-2.mp3')} volume={0.95} />
+      </Sequence>
+      <Sequence from={676} durationInFrames={338}>
+        <Audio src={staticFile('audio/madi-finance-3.mp3')} volume={0.95} />
+      </Sequence>
+      <Sequence from={1014} durationInFrames={338}>
+        <Audio src={staticFile('audio/madi-finance-4.mp3')} volume={0.95} />
+      </Sequence>
+
+</AbsoluteFill>
   );
 };
