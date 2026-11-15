@@ -30,12 +30,12 @@ jobs:
       - name: Render Microstock preview
         run: |
           mkdir -p output
-          npx remotion render src/index.ts MadiMicrostockGear output/madi-microstock-preview.mp4 --codec=h264 --frames=0-89 --scale=0.25
+          npx remotion render src/index.ts MadiMicrostockMaster output/madi-microstock-master-preview.mp4 --codec=h264 --scale=0.25
 
       - name: Upload preview video
         uses: actions/upload-artifact@v4
         with:
-          name: MADI-Microstock-Preview
-          path: output/madi-microstock-preview.mp4
+          name: MADI-Microstock-Master-Preview
+          path: output/madi-microstock-master-preview.mp4
           if-no-files-found: error
           retention-days: 7

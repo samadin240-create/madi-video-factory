@@ -6,6 +6,7 @@ import {MadiFinance} from './finance/MadiFinance';
 import {ExcavatorHydraulic} from './components/ExcavatorHydraulic';
 
 import {GearPreview} from './microstock/compositions/GearPreview';
+import {MicrostockMaster} from './microstock/compositions/MicrostockMaster';
 
 export const Root: React.FC = () => (
   <>
@@ -39,6 +40,14 @@ export const Root: React.FC = () => (
     <Composition
       id="MadiMicrostockGear"
       component={GearPreview}
+      durationInFrames={1800}
+      fps={30}
+      width={3840}
+      height={2160}
+    />
+    <Composition
+      id="MadiMicrostockMaster"
+      component={MicrostockMaster}
       durationInFrames={1800}
       fps={30}
       width={3840}
