@@ -11,354 +11,218 @@ import {
 } from 'remotion';
 
 const C = {
-  bg: '#080D18',
-  panel: '#111C2E',
+  bg: '#070B14',
   yellow: '#FACC15',
   blue: '#38BDF8',
   oil: '#22C55E',
   white: '#F8FAFC',
   muted: '#94A3B8',
-  metal: '#64748B',
 };
 
 const scenes = [
-  {
-    title: 'HOW CAN IT LIFT',
-    subtitle: 'TONS OF EARTH?',
-    detail: 'The secret is hydraulic power.',
-    color: C.yellow,
-    type: 'hero',
-  },
-  {
-    title: '1. DIESEL ENGINE',
-    subtitle: 'The engine drives a hydraulic pump.',
-    detail: 'Mechanical power becomes hydraulic power.',
-    color: C.blue,
-    type: 'engine',
-  },
-  {
-    title: '2. HYDRAULIC PUMP',
-    subtitle: 'The pump pushes oil under pressure.',
-    detail: 'Pressurized oil travels through strong hoses.',
-    color: C.oil,
-    type: 'pump',
-  },
-  {
-    title: '3. OIL PRESSURE',
-    subtitle: 'Oil flows through hydraulic hoses.',
-    detail: 'Pressure carries force to the cylinders.',
-    color: C.blue,
-    type: 'oil',
-  },
-  {
-    title: '4. HYDRAULIC CYLINDER',
-    subtitle: 'Oil pressure pushes the piston rod.',
-    detail: 'The cylinder extends and creates movement.',
-    color: C.yellow,
-    type: 'cylinder',
-  },
-  {
-    title: '5. BOOM, ARM & BUCKET',
-    subtitle: 'The excavator arm starts to move.',
-    detail: 'Hydraulic cylinders move each section.',
-    color: C.oil,
-    type: 'arm',
-  },
-  {
-    title: '6. OPERATOR CONTROL',
-    subtitle: 'Valves direct the flow of oil.',
-    detail: 'The operator controls boom, arm and bucket.',
-    color: C.blue,
-    type: 'control',
-  },
-  {
-    title: 'POWER IN EVERY DROP',
-    subtitle: 'Small amounts of oil move giant machines.',
-    detail: 'Follow Kuli Mesin for more heavy equipment lessons.',
-    color: C.yellow,
-    type: 'end',
-  },
+  { title: 'KEKUATAN BESAR', subtitle: 'BERASAL DARI OLI', detail: 'Bagaimana excavator mengangkat tanah berton-ton?', color: C.yellow, type: 'hero' },
+  { title: 'MESIN DIESEL', subtitle: 'MEMUTAR POMPA HIDROLIK', detail: 'Tenaga mekanis diubah menjadi tenaga hidrolik.', color: C.blue, type: 'engine' },
+  { title: 'POMPA HIDROLIK', subtitle: 'MENDORONG OLI', detail: 'Pompa menghasilkan aliran oli bertekanan tinggi.', color: C.oil, type: 'pump' },
+  { title: 'ALIRAN OLI', subtitle: 'MELALUI SELANG KHUSUS', detail: 'Tekanan diteruskan menuju silinder hidrolik.', color: C.blue, type: 'oil' },
+  { title: 'SILINDER HIDROLIK', subtitle: 'PISTON MULAI BERGERAK', detail: 'Tekanan oli mendorong batang piston.', color: C.yellow, type: 'cylinder' },
+  { title: 'BOOM, ARM, BUCKET', subtitle: 'LENGAN MULAI BERGERAK', detail: 'Silinder menggerakkan bagian-bagian excavator.', color: C.oil, type: 'arm' },
+  { title: 'KATUP KONTROL', subtitle: 'MENGATUR ARAH OLI', detail: 'Operator mengendalikan arah dan gerakan alat.', color: C.blue, type: 'control' },
+  { title: 'KEKUATAN SETIAP TETES', subtitle: 'OLI MENGGERAKKAN MESIN RAKSASA', detail: 'Follow Kuli Mesin untuk belajar alat berat lainnya!', color: C.yellow, type: 'end' },
 ] as const;
 
-const HydraulicDiagram: React.FC<{type: string}> = ({type}) => {
+const MechanicalVisual: React.FC<{type: string; color: string}> = ({type, color}) => {
   const frame = useCurrentFrame();
-  const pulse = 0.5 + 0.5 * Math.sin(frame * 0.12);
-
-  const line = (x1: number, y1: number, x2: number, y2: number) => (
-    <line
-      x1={x1} y1={y1} x2={x2} y2={y2}
-      stroke={C.oil}
-      strokeWidth="12"
-      strokeLinecap="round"
-      strokeDasharray="20 18"
-      strokeDashoffset={-frame * 2}
-    />
-  );
-
-  if (type === 'hero' || type === 'arm') {
-    const boom = type === 'hero' ? 0 : Math.sin(frame * 0.035) * 12;
-    return (
-      <svg viewBox="0 0 900 650" width="100%" height="100%">
-        <path d="M0 540 L900 540" stroke="#475569" strokeWidth="8"/>
-        <path d="M80 555 L780 555" stroke="#334155" strokeWidth="22"/>
-        <rect x="230" y="390" width="360" height="120" rx="28"
-          fill="#D69E00" stroke={C.yellow} strokeWidth="8"/>
-        <rect x="280" y="320" width="230" height="95" rx="20"
-          fill="#EAB308" stroke="#FDE68A" strokeWidth="7"/>
-        <rect x="320" y="335" width="120" height="62" rx="8"
-          fill="#172033" stroke="#94A3B8" strokeWidth="5"/>
-        <circle cx="270" cy="520" r="48" fill="#0F172A" stroke="#94A3B8" strokeWidth="12"/>
-        <circle cx="540" cy="520" r="48" fill="#0F172A" stroke="#94A3B8" strokeWidth="12"/>
-        <g transform={`rotate(${-25 + boom}, 470, 365)`}>
-          <rect x="445" y="250" width="330" height="75" rx="22"
-            fill="#EAB308" stroke="#FDE68A" strokeWidth="8"/>
-          <g transform={`rotate(${18 + boom * 0.5}, 760, 285)`}>
-            <rect x="730" y="260" width="190" height="55" rx="16"
-              fill="#CA8A04" stroke="#FDE68A" strokeWidth="7"/>
-            <path d="M900 270 L940 330 L910 385 L865 365 L875 320 Z"
-              fill="#A16207" stroke={C.yellow} strokeWidth="8"/>
-          </g>
-          <rect x="510" y="290" width="150" height="22" rx="10"
-            fill="#CBD5E1" stroke="#64748B" strokeWidth="4"/>
-        </g>
-        {type === 'hero' && (
-          <>
-            {[0,1,2,3,4,5].map(i => (
-              <circle key={i}
-                cx={650 + i * 28}
-                cy={170 + Math.sin(frame * 0.1 + i) * 25}
-                r={9}
-                fill={C.yellow}
-                opacity={pulse}
-              />
-            ))}
-            <text x="450" y="115" fill={C.yellow} textAnchor="middle"
-              fontSize="36" fontWeight="bold">HEAVY LIFTING POWER</text>
-          </>
-        )}
-      </svg>
-    );
-  }
-
-  if (type === 'engine') {
-    return (
-      <svg viewBox="0 0 900 650" width="100%" height="100%">
-        <rect x="230" y="190" width="440" height="300" rx="28"
-          fill="#334155" stroke={C.blue} strokeWidth="10"/>
-        <rect x="300" y="240" width="180" height="190" rx="16"
-          fill="#0F172A" stroke="#CBD5E1" strokeWidth="8"/>
-        <rect x="350" y={270 + Math.sin(frame * 0.15) * 35}
-          width="80" height="90" rx="10" fill="#94A3B8"/>
-        <circle cx="560" cy="340" r="75" fill="#1E293B"
-          stroke={C.yellow} strokeWidth="12"/>
-        <circle cx="560" cy="340" r="22" fill={C.yellow}/>
-        <path d="M480 340 L530 340" stroke="#E2E8F0" strokeWidth="16"/>
-        <path d="M560 265 L560 190 L720 190" stroke={C.blue}
-          strokeWidth="12" fill="none"/>
-        <text x="450" y="555" fill={C.white} textAnchor="middle"
-          fontSize="32" fontWeight="bold">DIESEL ENGINE → PUMP</text>
-      </svg>
-    );
-  }
-
-  if (type === 'pump' || type === 'oil') {
-    return (
-      <svg viewBox="0 0 900 650" width="100%" height="100%">
-        <rect x="100" y="230" width="220" height="190" rx="30"
-          fill="#334155" stroke={C.blue} strokeWidth="10"/>
-        <circle cx="210" cy="325" r="68" fill="#0F172A"
-          stroke={C.yellow} strokeWidth="12"/>
-        <circle cx="210" cy="325" r="20" fill={C.yellow}/>
-        {[0,1,2,3,4].map(i => (
-          <line key={i} x1={210} y1={325}
-            x2={210 + Math.cos(frame * 0.12 + i * 1.25) * 55}
-            y2={325 + Math.sin(frame * 0.12 + i * 1.25) * 55}
-            stroke={C.yellow} strokeWidth="8"/>
-        ))}
-        {line(320, 325, 700, 325)}
-        <rect x="690" y="220" width="110" height="210" rx="20"
-          fill="#334155" stroke={C.oil} strokeWidth="10"/>
-        <text x="450" y="510" fill={C.white} textAnchor="middle"
-          fontSize="32" fontWeight="bold">
-          {type === 'pump' ? 'HYDRAULIC PUMP' : 'PRESSURIZED OIL FLOW'}
-        </text>
-        {[0,1,2,3,4].map(i => (
-          <circle key={i}
-            cx={350 + ((frame * 5 + i * 80) % 300)}
-            cy={325}
-            r="10"
-            fill="#BBF7D0"
-          />
-        ))}
-      </svg>
-    );
-  }
-
-  if (type === 'cylinder') {
-    const extension = 100 + 65 * (0.5 + 0.5 * Math.sin(frame * 0.07));
-    return (
-      <svg viewBox="0 0 900 650" width="100%" height="100%">
-        <rect x="140" y="240" width="440" height="160" rx="28"
-          fill="#475569" stroke="#CBD5E1" strokeWidth="10"/>
-        <rect x="170" y="265" width="350" height="110" rx="16"
-          fill="#0F172A"/>
-        <rect x="170" y="280" width={extension} height="80"
-          fill={C.oil} opacity="0.75"/>
-        <rect x="570" y="295" width="240" height="50" rx="12"
-          fill="#CBD5E1" stroke="#64748B" strokeWidth="8"/>
-        <circle cx="580" cy="320" r="32" fill="#94A3B8"
-          stroke="#E2E8F0" strokeWidth="7"/>
-        {line(60, 320, 140, 320)}
-        <text x="450" y="500" fill={C.yellow} textAnchor="middle"
-          fontSize="34" fontWeight="bold">OIL PRESSURE → PISTON MOVEMENT</text>
-      </svg>
-    );
-  }
+  const pulse = 0.5 + 0.5 * Math.sin(frame * 0.09);
+  const rotation = frame * 3;
+  const piston = 150 + Math.sin(frame * 0.065) * 55;
 
   return (
     <svg viewBox="0 0 900 650" width="100%" height="100%">
-      <rect x="170" y="160" width="560" height="330" rx="28"
-        fill="#1E293B" stroke={C.blue} strokeWidth="10"/>
-      <rect x="250" y="235" width="140" height="180" rx="20"
-        fill="#334155" stroke={C.yellow} strokeWidth="8"/>
-      <rect x="510" y="235" width="140" height="180" rx="20"
-        fill="#334155" stroke={C.yellow} strokeWidth="8"/>
-      <path d="M390 325 L510 325" stroke={C.oil}
-        strokeWidth="18" strokeDasharray="18 12"/>
-      <circle cx="320" cy="325" r="32" fill={C.yellow}/>
-      <circle cx="580" cy="325" r="32" fill={C.yellow}/>
-      <text x="450" y="555" textAnchor="middle" fill={C.white}
-        fontSize="32" fontWeight="bold">CONTROL VALVE</text>
-      <path d="M450 130 L450 160" stroke={C.blue} strokeWidth="12"/>
-      <circle cx="450" cy="115" r="24" fill={C.blue}/>
+      <defs>
+        <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#E2E8F0"/>
+          <stop offset="35%" stopColor="#64748B"/>
+          <stop offset="65%" stopColor="#334155"/>
+          <stop offset="100%" stopColor="#CBD5E1"/>
+        </linearGradient>
+        <linearGradient id="gold" x1="0" y1="0" x2="0.8" y2="1">
+          <stop offset="0%" stopColor="#FEF08A"/>
+          <stop offset="45%" stopColor="#EAB308"/>
+          <stop offset="100%" stopColor="#854D0E"/>
+        </linearGradient>
+        <linearGradient id="oil" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#14532D"/>
+          <stop offset="50%" stopColor="#4ADE80"/>
+          <stop offset="100%" stopColor="#166534"/>
+        </linearGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="9" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M40 0H0V40" fill="none" stroke="#334155" strokeWidth="1" opacity=".4"/>
+        </pattern>
+      </defs>
+
+      <rect width="900" height="650" fill="url(#grid)" opacity=".65"/>
+      <ellipse cx="450" cy="525" rx="340" ry="45" fill="#020617" opacity=".7"/>
+
+      {(type === 'hero' || type === 'arm' || type === 'end') && (
+        <g>
+          <path d="M90 500 L780 500" stroke="#64748B" strokeWidth="12"/>
+          <path d="M190 490 Q200 430 290 430 H560 Q640 440 650 490 Z" fill="url(#metal)" stroke="#CBD5E1" strokeWidth="8"/>
+          <rect x="220" y="440" width="400" height="75" rx="35" fill="#0F172A" stroke="#94A3B8" strokeWidth="15"/>
+          {[270,360,450,540].map((x,i)=><circle key={i} cx={x} cy="478" r="27" fill="url(#metal)" stroke="#475569" strokeWidth="8"/>)}
+          <path d="M280 425 L300 325 L485 325 L535 430 Z" fill="url(#gold)" stroke="#FDE68A" strokeWidth="8"/>
+          <path d="M325 330 L350 230 L475 230 L505 330 Z" fill="#1E293B" stroke="#CBD5E1" strokeWidth="8"/>
+          <path d="M365 250 L455 250 L475 315 L345 315 Z" fill="#38BDF8" opacity=".35" stroke="#7DD3FC" strokeWidth="5"/>
+          <g transform={`rotate(${-22 + Math.sin(frame*.035)*5}, 480, 340)`}>
+            <path d="M460 345 L540 170 L700 95 L730 130 L585 225 L525 365 Z" fill="url(#gold)" stroke="#FDE68A" strokeWidth="10"/>
+            <path d="M555 210 L700 135 L720 155 L600 240" fill="none" stroke="url(#metal)" strokeWidth="19"/>
+            <g transform={`rotate(${18 + Math.sin(frame*.04)*9}, 700, 125)`}>
+              <path d="M685 115 L830 145 L850 185 L790 215 L720 165 Z" fill="url(#gold)" stroke="#FDE68A" strokeWidth="8"/>
+              <path d="M790 205 L845 185 L865 245 L825 275 L790 240 Z" fill="#A16207" stroke="#FACC15" strokeWidth="7"/>
+            </g>
+            <path d="M505 350 L620 220" stroke="url(#metal)" strokeWidth="19"/>
+            <path d="M505 350 L620 220" stroke="#E2E8F0" strokeWidth="5"/>
+          </g>
+          <path d="M480 350 Q540 260 600 210" fill="none" stroke="#22C55E" strokeWidth="9" strokeDasharray="16 12" filter="url(#glow)"/>
+        </g>
+      )}
+
+      {type === 'engine' && (
+        <g>
+          <rect x="210" y="170" width="440" height="300" rx="30" fill="url(#metal)" stroke="#CBD5E1" strokeWidth="10"/>
+          <rect x="275" y="220" width="165" height="200" rx="15" fill="#0F172A" stroke="#94A3B8" strokeWidth="8"/>
+          <rect x="315" y={250 + Math.sin(frame*.15)*40} width="85" height="95" rx="8" fill="url(#metal)"/>
+          <circle cx="540" cy="320" r="100" fill="#1E293B" stroke="url(#gold)" strokeWidth="18"/>
+          <g transform={`rotate(${rotation}, 540, 320)`}>
+            {[0,60,120,180,240,300].map(a=><rect key={a} x="530" y="235" width="20" height="85" rx="8" fill="#FACC15" transform={`rotate(${a} 540 320)`}/>)}
+          </g>
+          <path d="M650 320 H770" stroke={C.oil} strokeWidth="20" filter="url(#glow)"/>
+          <text x="450" y="545" fill={C.white} textAnchor="middle" fontSize="32" fontWeight="bold">DIESEL POWER → PUMP</text>
+        </g>
+      )}
+
+      {(type === 'pump' || type === 'oil') && (
+        <g>
+          <rect x="100" y="220" width="240" height="210" rx="30" fill="url(#metal)" stroke="#CBD5E1" strokeWidth="10"/>
+          <circle cx="220" cy="325" r="82" fill="#0F172A" stroke="url(#gold)" strokeWidth="16"/>
+          <g transform={`rotate(${rotation}, 220, 325)`}>
+            {[0,60,120,180,240,300].map(a=><path key={a} d="M220 325 L220 255" stroke="#FACC15" strokeWidth="19" strokeLinecap="round" transform={`rotate(${a} 220 325)`}/>)}
+          </g>
+          <path d="M340 325 H770" stroke="url(#oil)" strokeWidth="30" strokeLinecap="round" filter="url(#glow)"/>
+          {[0,1,2,3,4,5].map(i=><circle key={i} cx={350+((frame*5+i*75)%390)} cy="325" r="12" fill="#BBF7D0" filter="url(#glow)"/>)}
+          <rect x="745" y="220" width="75" height="210" rx="18" fill="url(#metal)" stroke="#CBD5E1" strokeWidth="8"/>
+          <text x="450" y="520" fill={C.white} textAnchor="middle" fontSize="30" fontWeight="bold">{type === 'pump' ? 'HYDRAULIC PUMP' : 'PRESSURIZED OIL FLOW'}</text>
+        </g>
+      )}
+
+      {type === 'cylinder' && (
+        <g>
+          <rect x="110" y="240" width="600" height="160" rx="28" fill="url(#metal)" stroke="#CBD5E1" strokeWidth="12"/>
+          <rect x="145" y="270" width="520" height="100" rx="15" fill="#0F172A"/>
+          <rect x="145" y="285" width={piston} height="70" rx="8" fill="url(#oil)" filter="url(#glow)"/>
+          <rect x={145+piston} y="305" width={520-piston} height="30" fill="url(#metal)"/>
+          <rect x="650" y="295" width="170" height="50" rx="12" fill="url(#metal)" stroke="#E2E8F0" strokeWidth="7"/>
+          <circle cx="665" cy="320" r="32" fill="#64748B" stroke="#E2E8F0" strokeWidth="7"/>
+          <path d="M65 320 H130" stroke={C.oil} strokeWidth="18" filter="url(#glow)"/>
+          <text x="450" y="500" fill={C.yellow} textAnchor="middle" fontSize="32" fontWeight="bold">PISTON EXTENSION</text>
+        </g>
+      )}
+
+      {type === 'control' && (
+        <g>
+          <rect x="175" y="170" width="550" height="300" rx="30" fill="url(#metal)" stroke="#CBD5E1" strokeWidth="10"/>
+          {[300,450,600].map((x,i)=><g key={i}>
+            <rect x={x-42} y="245" width="84" height="145" rx="14" fill="#0F172A" stroke="#FACC15" strokeWidth="7"/>
+            <circle cx={x} cy={315} r="28" fill="url(#gold)"/>
+            <path d={`M${x} 245 V${200+Math.sin(frame*.07+i)*15}`} stroke="#E2E8F0" strokeWidth="13"/>
+          </g>)}
+          <path d="M300 420 H600" stroke={C.oil} strokeWidth="15" strokeDasharray="18 12"/>
+          <text x="450" y="545" fill={C.white} textAnchor="middle" fontSize="32" fontWeight="bold">CONTROL VALVE</text>
+        </g>
+      )}
+
+      <circle cx="760" cy="105" r={12 + pulse*9} fill={color} opacity=".75" filter="url(#glow)"/>
+      <text x="450" y="70" fill={color} textAnchor="middle" fontSize="25" fontWeight="bold" letterSpacing="5">MADI MECHANICAL SYSTEM</text>
     </svg>
   );
 };
 
-const Scene: React.FC<{index: number}> = ({index}) => {
+const KineticWords: React.FC<{text: string; color: string; size: number; delay?: number}> = ({text, color, size, delay=0}) => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  return (
+    <div style={{display:'flex', flexWrap:'wrap', justifyContent:'center', columnGap:12, rowGap:5}}>
+      {text.split(' ').map((word,i)=>{
+        const p = spring({frame:frame-delay-i*4, fps, config:{damping:13, stiffness:120}});
+        return <span key={i} style={{
+          display:'inline-block',
+          color,
+          opacity:p,
+          transform:`translateY(${(1-p)*45}px) scale(${.7+p*.3})`,
+          textShadow:`0 0 25px ${color}66`,
+          fontSize:size,
+          fontWeight:950,
+          letterSpacing:1,
+        }}>{word}</span>;
+      })}
+    </div>
+  );
+};
+
+const Scene: React.FC<{index:number}> = ({index}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const item = scenes[index];
-
-  const enter = spring({
-    frame,
-    fps,
-    config: {damping: 16, stiffness: 90},
-  });
-
-  const opacity = interpolate(frame, [0, 12, 205, 235], [0, 1, 1, 0], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
+  const enter = spring({frame, fps, config:{damping:16, stiffness:90}});
+  const opacity = interpolate(frame,[0,10,215,235],[0,1,1,0],{extrapolateLeft:'clamp',extrapolateRight:'clamp'});
+  const zoom = interpolate(frame,[0,235],[.94,1.04]);
 
   return (
     <AbsoluteFill style={{
-      background: `radial-gradient(circle at 50% 45%, #1B2B42 0%, ${C.bg} 72%)`,
-      color: C.white,
-      fontFamily: 'Arial, sans-serif',
-      padding: 55,
-      opacity,
+      background:'radial-gradient(ellipse at 50% 48%, #263B55 0%, #0B1423 48%, #03060C 100%)',
+      color:C.white, fontFamily:'Arial, sans-serif', padding:42, opacity, overflow:'hidden',
     }}>
-      <div style={{
-        marginTop: 95,
-        textAlign: 'center',
-        transform: `translateY(${(1 - enter) * 70}px)`,
-      }}>
-        <div style={{
-          color: item.color,
-          fontSize: 48,
-          fontWeight: 900,
-          letterSpacing: 1,
-        }}>
-          {item.title}
+      <AbsoluteFill style={{opacity:.24, backgroundImage:'linear-gradient(rgba(56,189,248,.16) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,.16) 1px, transparent 1px)', backgroundSize:'42px 42px'}}/>
+      <div style={{position:'absolute',top:80,left:30,right:30,textAlign:'center',transform:`translateY(${(1-enter)*40}px)`}}>
+        <KineticWords text={item.title} color={item.color} size={45}/>
+        <div style={{marginTop:20}}>
+          <KineticWords text={item.subtitle} color={C.white} size={29} delay={8}/>
         </div>
-        <div style={{
-          marginTop: 22,
-          fontSize: 34,
-          lineHeight: 1.35,
-          fontWeight: 700,
-        }}>
-          {item.subtitle}
-        </div>
-        <div style={{
-          marginTop: 18,
-          color: C.muted,
-          fontSize: 25,
-          lineHeight: 1.4,
-        }}>
+        <div style={{marginTop:18,color:C.muted,fontSize:23,lineHeight:1.4,opacity:interpolate(frame,[12,28],[0,1],{extrapolateRight:'clamp'})}}>
           {item.detail}
         </div>
       </div>
 
       <div style={{
-        position: 'absolute',
-        left: 55,
-        right: 55,
-        top: 650,
-        height: 720,
-        backgroundColor: C.panel,
-        border: `2px solid ${item.color}55`,
-        borderRadius: 32,
-        padding: 24,
-        boxSizing: 'border-box',
-        boxShadow: `0 0 45px ${item.color}22`,
+        position:'absolute',left:22,right:22,top:510,height:770,
+        border:'1px solid #64748B88',borderRadius:30,
+        background:'linear-gradient(145deg, rgba(51,65,85,.78), rgba(2,6,23,.94))',
+        boxShadow:`0 20px 70px #000A, 0 0 35px ${item.color}22`,
+        overflow:'hidden',transform:`scale(${zoom})`,
       }}>
-        <HydraulicDiagram type={item.type}/>
+        <MechanicalVisual type={item.type} color={item.color}/>
       </div>
 
-      <div style={{
-        position: 'absolute',
-        left: 65,
-        right: 65,
-        bottom: 135,
-        height: 7,
-        backgroundColor: '#334155',
-        borderRadius: 10,
-      }}>
-        <div style={{
-          width: `${((index + 1) / scenes.length) * 100}%`,
-          height: '100%',
-          backgroundColor: item.color,
-          borderRadius: 10,
-        }}/>
+      <div style={{position:'absolute',bottom:130,left:60,right:60,height:7,background:'#334155',borderRadius:10}}>
+        <div style={{width:`${((index+1)/scenes.length)*100}%`,height:'100%',background:item.color,borderRadius:10,boxShadow:`0 0 15px ${item.color}`}}/>
       </div>
-
-      <div style={{
-        position: 'absolute',
-        bottom: 65,
-        left: 0,
-        right: 0,
-        textAlign: 'center',
-        color: C.muted,
-        fontSize: 23,
-        fontWeight: 700,
-        letterSpacing: 3,
-      }}>
+      <div style={{position:'absolute',bottom:65,left:0,right:0,textAlign:'center',color:C.muted,fontSize:20,fontWeight:800,letterSpacing:4}}>
         KULI MESIN • HEAVY EQUIPMENT
       </div>
     </AbsoluteFill>
   );
 };
 
-export const ExcavatorHydraulic: React.FC = () => {
-  return (
-    <AbsoluteFill>
-      <Audio src={staticFile('audio/hydraulic-full.mp3')} />
-      {scenes.map((scene, index) => (
-        <React.Fragment key={index}>
-          <Sequence from={index * 235} durationInFrames={235}>
-            <Scene index={index}/>
-          </Sequence>
-        </React.Fragment>
-      ))}
-    </AbsoluteFill>
-  );
-};
-
-const SequencePlaceholder: React.FC<{index: number}> = ({index}) => {
-  return (
-    <AbsoluteFill>
-      <Scene index={index}/>
-    </AbsoluteFill>
-  );
-};
+export const ExcavatorHydraulic: React.FC = () => (
+  <AbsoluteFill>
+    <Audio src={staticFile('audio/hydraulic-full.mp3')}/>
+    {scenes.map((scene,index)=>(
+      <Sequence key={index} from={index*235} durationInFrames={235}>
+        <Scene index={index}/>
+      </Sequence>
+    ))}
+  </AbsoluteFill>
+);
