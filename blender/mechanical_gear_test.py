@@ -43,10 +43,12 @@ def bevel(obj, amount=0.035, segments=3):
     mod.segments = segments
     obj.modifiers.new("Weighted corner normals", "WEIGHTED_NORMAL")
 
-def cylinder(name, radius, depth, loc, mat, vertices=96):
+def cylinder(name, radius, depth, loc, mat, vertices=96, axis_y=False):
     bpy.ops.mesh.primitive_cylinder_add(vertices=vertices, radius=radius, depth=depth, location=loc)
     obj = bpy.context.object
     obj.name = name
+    if axis_y:
+        obj.rotation_euler[0] = math.radians(90)
     obj.data.materials.append(mat)
     bevel(obj, min(0.035, depth * 0.15))
     return obj
@@ -87,23 +89,29 @@ center = pitch_a + pitch_b
 xa, xb = -center/2, center/2
 
 # Mounting plate and bearing blocks
-cylinder("Base plate", 1, 0.16, (0, 0.38, 0), dark)  # decorative base disk
+bpy.ops.mesh.primitive_cube_add(size=1, location=(0, 0.15, -2.48))
+base = bpy.context.object
+base.name = "Heavy mounting base"
+base.dimensions = (6.4, 1.15, 0.24)
+bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+base.data.materials.append(dark)
+bevel(base, 0.10, 4)
 for x, r in [(xa, 0.43), (xb, 0.34)]:
-    cylinder("Bearing pedestal", r, 0.48, (x, 0.05, 0), dark)
-    cylinder("Bearing outer race", r*0.67, 0.12, (x, -0.23, 0), brass)
-    cylinder("Bearing inner race", r*0.43, 0.14, (x, -0.31, 0), steel)
-    cylinder("Shaft", 0.13, 0.75, (x, -0.05, 0), steel)
+    cylinder("Bearing pedestal", r, 0.48, (x, 0.05, -2.22), dark)
+    cylinder("Bearing outer race", r*0.67, 0.12, (x, -0.23, 0), brass, axis_y=True)
+    cylinder("Bearing inner race", r*0.43, 0.14, (x, -0.31, 0), steel, axis_y=True)
+    cylinder("Shaft", 0.13, 0.75, (x, -0.05, 0), steel, axis_y=True)
 
 g1 = gear("Drive gear - 24T", teeth_a, module, xa, 0, 0.34, steel)
 g2 = gear("Driven gear - 16T", teeth_b, module, xb, 0, 0.34, brass)
 
 # Hubs sit on the visible front face.
 for x, rad in [(xa, 0.36), (xb, 0.27)]:
-    cylinder("Gear hub", rad, 0.20, (x, -0.28, 0), steel)
-    cylinder("Hub cap", rad*0.55, 0.08, (x, -0.40, 0), brass)
+    cylinder("Gear hub", rad, 0.20, (x, -0.28, 0), steel, axis_y=True)
+    cylinder("Hub cap", rad*0.55, 0.08, (x, -0.40, 0), brass, axis_y=True)
 
 # Studio ground
-bpy.ops.mesh.primitive_plane_add(size=200, location=(0, 0.85, 0))
+bpy.ops.mesh.primitive_plane_add(size=200, location=(0, 0, -2.62))
 plane = bpy.context.object
 plane.name = "Studio ground"
 plane.data.materials.append(floor_mat)
@@ -114,7 +122,6 @@ cam = bpy.context.object
 cam.name = "Product camera"
 target = (0, 0, 0)
 cam.rotation_euler = (math.radians(32), 0, 0)
-direction = bpy.mathutils.Vector(target) - cam.location if hasattr(bpy, "mathutils") else None
 # Track camera toward the mechanism.
 from mathutils import Vector
 cam.rotation_euler = (Vector(target) - cam.location).to_track_quat("-Z", "Y").to_euler()
