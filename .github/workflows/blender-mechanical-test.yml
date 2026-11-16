@@ -1,0 +1,43 @@
+name: MADI Blender Mechanical Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  blender-test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+
+      - name: Install Blender and FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y blender ffmpeg
+          blender --version
+          ffmpeg -version | head -n 2
+
+      - name: Render mechanical gear test
+        run: |
+          mkdir -p output
+          blender --background --factory-startup --threads 2 --python blender/mechanical_gear_test.py
+          test -s output/madi-gear-test.png
+          test -s output/frame_0001.png
+          ffmpeg -y -framerate 30 -i output/frame_%04d.png \
+            -c:v libx264 -pix_fmt yuv420p -crf 18 \
+            output/madi-gear-test.mp4
+          test -s output/madi-gear-test.mp4
+
+      - name: Upload Blender test renders
+        uses: actions/upload-artifact@v4
+        with:
+          name: MADI-Blender-Mechanical-Test
+          path: |
+            output/madi-gear-test.png
+            output/madi-gear-test.mp4
+          if-no-files-found: error
+          retention-days: 7
